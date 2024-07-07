@@ -29,12 +29,12 @@ ORDER BY
 
 -- Question: What are the top 5 conditions with the highest average mortality rates?
 SELECT 
-    `Procedure/Condition`, 
-    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+    procedure_condition, 
+    AVG(risk_adjusted_mortality_rate) AS Avg_Mortality_Rate
 FROM 
     imi_gis_long_2022
 GROUP BY 
-    `Procedure/Condition`
+    procedure_condition
 ORDER BY 
     Avg_Mortality_Rate DESC
 LIMIT 5;
@@ -42,8 +42,8 @@ LIMIT 5;
 -- Question: What is the total number of cases and deaths by county?
 SELECT 
     COUNTY, 
-    SUM(`# of Cases`) AS Total_Cases, 
-    SUM(`# of Deaths`) AS Total_Deaths
+    SUM(number_of_cases) AS Total_Cases, 
+    SUM(number_of_deaths) AS Total_Deaths
 FROM 
     imi_gis_long_2022
 GROUP BY 
@@ -54,30 +54,30 @@ ORDER BY
 -- Question: How do different hospitals compare in terms of mortality rates for specific conditions?
 SELECT 
     HOSPITAL, 
-    `Procedure/Condition`, 
-    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+    procedure_condition, 
+    AVG(risk_adjusted_mortality_rate) AS Avg_Mortality_Rate
 FROM 
     imi_gis_long_2022
 WHERE 
     HOSPITAL IS NOT NULL
 GROUP BY 
     HOSPITAL, 
-    `Procedure/Condition`
+    procedure_condition
 ORDER BY 
     HOSPITAL, 
-    `Procedure/Condition`;
+    procedure_condition;
 
 -- Question: How have mortality rates changed over the years for a specific condition?
 SELECT 
     YEAR, 
-    `Procedure/Condition`, 
-    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+    procedure_condition, 
+    AVG(risk_adjusted_mortality_rate) AS Avg_Mortality_Rate
 FROM 
     imi_gis_long_2022
 WHERE 
-    `Procedure/Condition` = 'Acute Stroke'
+    procedure_condition = 'Acute Stroke'
 GROUP BY 
     YEAR, 
-    `Procedure/Condition`
+    procedure_condition
 ORDER BY 
     YEAR;
