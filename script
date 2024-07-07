@@ -1,0 +1,83 @@
+-- Create the table 
+CREATE TABLE imi_gis_long_2022 (
+    YEAR INTEGER,
+    COUNTY VARCHAR(255),
+    HOSPITAL VARCHAR(255),
+    OSHPDID VARCHAR(255),
+    Procedure_Condition VARCHAR(255),
+    Risk_Adjusted_Mortality_Rate FLOAT,
+    Number_of_Deaths INTEGER,
+    Number_of_Cases INTEGER,
+    Hospital_Ratings VARCHAR(255),
+    LONGITUDE FLOAT,
+    LATITUDE FLOAT
+);
+
+-- Question: What is the average risk-adjusted mortality rate by year and procedure/condition?
+SELECT 
+    year, 
+    procedure_condition, 
+    AVG(risk_adjusted_mortality_rate) AS Avg_Mortality_Rate
+FROM 
+    imi_gis_long_2022
+GROUP BY 
+    year, 
+    procedure_condition
+ORDER BY 
+    year, 
+    procedure_condition;
+
+-- Question: What are the top 5 conditions with the highest average mortality rates?
+SELECT 
+    `Procedure/Condition`, 
+    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+FROM 
+    imi_gis_long_2022
+GROUP BY 
+    `Procedure/Condition`
+ORDER BY 
+    Avg_Mortality_Rate DESC
+LIMIT 5;
+
+-- Question: What is the total number of cases and deaths by county?
+SELECT 
+    COUNTY, 
+    SUM(`# of Cases`) AS Total_Cases, 
+    SUM(`# of Deaths`) AS Total_Deaths
+FROM 
+    imi_gis_long_2022
+GROUP BY 
+    COUNTY
+ORDER BY 
+    Total_Cases DESC;
+
+-- Question: How do different hospitals compare in terms of mortality rates for specific conditions?
+SELECT 
+    HOSPITAL, 
+    `Procedure/Condition`, 
+    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+FROM 
+    imi_gis_long_2022
+WHERE 
+    HOSPITAL IS NOT NULL
+GROUP BY 
+    HOSPITAL, 
+    `Procedure/Condition`
+ORDER BY 
+    HOSPITAL, 
+    `Procedure/Condition`;
+
+-- Question: How have mortality rates changed over the years for a specific condition?
+SELECT 
+    YEAR, 
+    `Procedure/Condition`, 
+    AVG(`Risk Adjuested Mortality Rate`) AS Avg_Mortality_Rate
+FROM 
+    imi_gis_long_2022
+WHERE 
+    `Procedure/Condition` = 'Acute Stroke'
+GROUP BY 
+    YEAR, 
+    `Procedure/Condition`
+ORDER BY 
+    YEAR;
